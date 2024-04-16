@@ -51,8 +51,7 @@
             if(e.key=="Enter"){
                 e.preventDefault();
                 validateValue(input.value)
-                totalGuess++;
-                remainingGuess.textContent=(10-totalGuess);
+
                 if(totalGuess===10){
                     input.setAttribute("disabled","")
                     ifLose();
@@ -62,7 +61,6 @@
         submit.addEventListener("click",(e)=>{
             e.preventDefault();
             validateValue(input.value)
-            totalGuess++;
             remainingGuess.textContent=(10-totalGuess);
             if(totalGuess===10){
                 input.setAttribute("disabled","") //this is to disable the input
@@ -80,6 +78,8 @@
             }else{
                 input.value="";
                 highOrLow(inputValue)
+                totalGuess++;
+                remainingGuess.textContent=(10-totalGuess);
             }
         }
         function highOrLow(inputValue){
