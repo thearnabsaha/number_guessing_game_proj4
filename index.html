@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: sans-serif;
+        }
+        input{
+            width: 300px;
+            font-size: 1rem;
+            padding: .5rem 1rem;
+            border-radius: .5rem;
+            border: 1px solid grey;
+            outline: none;
+            margin-bottom: .5rem;
+        }
+        button{
+            font-size: 1.5rem;
+            padding: .5rem 2rem;
+            border-radius: .5rem;
+            outline: none;
+            border: 1px solid grey;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Choose number between 1-100</h1>
+    <p>you will have 10 chances to guess the number</p>
+    <input type="number" class="input" placeholder="Type A Number Between 1-100">
+    <button type="submit" class="submit">Submit</button>
+    <h2>Previous Guesses Are : <span class="prevGuess"></span></h2>
+    <h2>Remaining Guesses : <span class="remainingGuess"></span></h2>
+</body>
+    <script>
+        const winningNumber = parseInt(Math.random()*100+1);
+        const input = document.querySelector(".input")
+        const submit = document.querySelector(".submit")
+        const prevGuess = document.querySelector(".prevGuess")
+        const remainingGuess = document.querySelector(".remainingGuess")
+        const showText=document.body.appendChild(document.createElement("p").appendChild(document.createTextNode(``)))
+        let totalGuess = 0;
+        remainingGuess.textContent=10;
+        input.addEventListener("keypress",(e)=>{ // this is to use the enter key for submitting 
+            if(e.key=="Enter"){
+                e.preventDefault();
+                validateValue(input.value)
+                totalGuess++;
+                remainingGuess.textContent=(10-totalGuess);
+                if(totalGuess===10){
+                    input.setAttribute("disabled","")
+                    ifLose();
+                }
+            }
+        })
+        submit.addEventListener("click",(e)=>{
+            e.preventDefault();
+            validateValue(input.value)
+            totalGuess++;
+            remainingGuess.textContent=(10-totalGuess);
+            if(totalGuess===10){
+                input.setAttribute("disabled","") //this is to disable the input
+                ifLose();
+            }
+            input.focus() // this is to focus on input after i click submit
+        })
+        function validateValue(inputValue){
+            if(inputValue>100){
+                alert("please give a valid value")
+            }else if(inputValue<=0){
+                alert("please give a valid value")
+            }else if(isNaN(inputValue)){
+                alert("please give a valid value")
+            }else{
+                input.value="";
+                highOrLow(inputValue)
+            }
+        }
+        function highOrLow(inputValue){
+            if(parseInt(inputValue)===parseInt(winningNumber)){
+                showText.textContent="YOU WINN!"
+                addToPrevGuess(inputValue)
+                ifWin()
+            }else if(parseInt(inputValue)>parseInt(winningNumber)){
+                addToPrevGuess(inputValue)
+                showText.textContent="Your value is high!"
+            }else if(parseInt(inputValue)<parseInt(winningNumber)){
+                addToPrevGuess(inputValue)
+                showText.textContent="Your value is low!"
+            }
+        }
+        function addToPrevGuess(inputValue){
+            prevGuess.textContent+= `${inputValue} `
+            remainingGuess.textContent=(10-totalGuess);
+        }
+        function ifWin(){
+            document.body.style.backgroundColor="lightgreen"
+            const newButton = document.createElement('button');
+            newButton.textContent = 'Replay';
+            newButton.style.marginTop="1rem"
+            document.body.appendChild(newButton);
+            newButton.addEventListener("click",()=>{
+                location.reload()
+            })
+            
+            const newText =document.createElement("h1")
+            newText.textContent=`The Winning Number Was ${winningNumber}`
+            document.body.appendChild(newText)
+        }
+        function ifLose(){
+            document.body.style.backgroundColor="lightpink"
+            const newButton = document.createElement('button');
+            newButton.textContent = 'Replay';
+            newButton.style.marginTop="1rem"
+            document.body.appendChild(newButton);
+            newButton.addEventListener("click",()=>{
+                location.reload() // this is too refresh the page
+            })
+            
+            const newText =document.createElement("h1")
+            newText.textContent=`The Winning Number Was ${winningNumber}`
+            document.body.appendChild(newText)
+        }
+    </script>
+</html>
